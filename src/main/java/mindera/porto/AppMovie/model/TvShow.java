@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table (name="tvShows")
-public class TvShows {
+public class TvShow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -18,7 +18,7 @@ public class TvShows {
     private String director;
 
     @Column
-    private List<Actors> actorsList;
+    private List<Actor> actorsList;
 
     @Column
     private String description;
@@ -47,11 +47,11 @@ public class TvShows {
         this.director = director;
     }
 
-    public List<Actors> getActorsList() {
+    public List<Actor> getActorsList() {
         return actorsList;
     }
 
-    public void setActorsList(List<Actors> actorsList) {
+    public void setActorsList(List<Actor> actorsList) {
         this.actorsList = actorsList;
     }
 

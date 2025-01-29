@@ -6,7 +6,7 @@ import java.util.List;
 
 @Entity
 @Table(name="Actors")
-public class Actors {
+public class Actor {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +17,7 @@ public class Actors {
     @Column
     private String description;
     @Column
-    private List<TvShows> tvShowsList;
+    private List<TvShow> tvShowsList;
     @Column
-    private List<Movies> moviesList;
+    private List<Movie> moviesList;
 }
