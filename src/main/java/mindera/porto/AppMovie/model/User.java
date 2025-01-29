@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name= "users")
-
+//outro teste
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
