@@ -1,0 +1,27 @@
+[33mcommit e1ab920fc6e2b7a2c4e6d9bd31de9743e7295df2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: pedro <pedrojsilva93@gmail.com>
+Date:   Tue Jan 28 20:42:53 2025 +0000
+
+    No message
+
+ .gitattributes                                     |   2 [32m+[m
+ .gitignore                                         |  33 [32m+++[m
+ .mvn/wrapper/maven-wrapper.properties              |  19 [32m++[m
+ mvnw                                               | 259 [32m+++++++++++++++++++++[m
+ mvnw.cmd                                           | 149 [32m++++++++++++[m
+ pom.xml                                            |  63 [32m+++++[m
+ .../porto/AppMovie/AppMovieApplication.java        |  13 [32m++[m
+ .../mindera/porto/AppMovie/model/Utilizador.java   |  61 [32m+++++[m
+ .../porto/AppMovie/service/UtilizadorService.java  |   2 [32m+[m
+ src/main/resources/application.properties          |   9 [32m+[m
+ .../porto/AppMovie/AppMovieApplicationTests.java   |  13 [32m++[m
+ 11 files changed, 623 insertions(+)
+
+[33mcommit b4340200f47110ef4a0712fd8e8228b3a3fb4bd5[m
+Author: pedro <pedrojsilva93@gmail.com>
+Date:   Tue Jan 28 20:29:58 2025 +0000
+
+    No message
+
+ src/main/java/mindera/porto/AppMovie/service/UtilizadorService.java | 4 [32m++++[m
+ 1 file changed, 4 insertions(+)
