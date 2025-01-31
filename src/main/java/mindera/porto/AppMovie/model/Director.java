@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "actors")
-public class Actor {
+@Table(name = "directors")
+public class Director {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,14 +15,6 @@ public class Actor {
     @Column(unique = true, nullable = false)
     private String name;
 
-    @ManyToMany(mappedBy = "actors")
+    @OneToMany(mappedBy = "director", cascade = CascadeType.ALL)
     private List<Movie> movies = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
-            name = "actor_tv_show",
-            joinColumns = @JoinColumn(name = "actor_id"),
-            inverseJoinColumns = @JoinColumn(name = "tv_show_id")
-    )
-    private List<TvShow> tvShows = new ArrayList<>();
 }
