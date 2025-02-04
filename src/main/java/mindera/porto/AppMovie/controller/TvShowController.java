@@ -2,6 +2,8 @@ package mindera.porto.AppMovie.controller;
 
 
 import mindera.porto.AppMovie.model.TvShow;
+import mindera.porto.AppMovie.repository.DirectorRepository;
+import mindera.porto.AppMovie.repository.TvShowRepository;
 import mindera.porto.AppMovie.service.TvShowService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +16,11 @@ public class TvShowController {
 
     @Autowired
     private TvShowService tvShowService;
+    @Autowired
+    private TvShowRepository tvShowRepository;
+
+    @Autowired
+    private DirectorRepository directorRepository;
 
     @PostMapping("/add")
     public void addTvShow(@RequestBody TvShow tvShow) {

@@ -1,6 +1,7 @@
 package mindera.porto.AppMovie.service;
 
 
+import jakarta.transaction.Transactional;
 import mindera.porto.AppMovie.model.Director;
 import mindera.porto.AppMovie.repository.DirectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
