@@ -18,13 +18,13 @@ public class ActorController {
     }
 
 
-    @PostMapping("/add")
+    @PostMapping("")
     public List<Actor> addActors(@RequestBody List<Actor> actors) {
         return actorService.addActors(actors);
     }
 
-    @GetMapping("/{actorName}/movies")
-    public List<Movie> getMoviesByActorName(@PathVariable String actorName) {
+    @GetMapping("/{actorId}/movies")
+    public List<Movie> getMoviesByActorName(@PathVariable String actorName) {   // Passar o ID em vez do nome "Long Id"
         return actorService.getMoviesByActorName(actorName);
     }
 }

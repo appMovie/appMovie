@@ -27,7 +27,7 @@ public class MovieController {
         movieService.addNewMovie(movie);
     }*/
 
-    @PostMapping("/add")
+    @PostMapping("")
     public void addNewMovies(@RequestBody Set<Movie> movies) {
         movieService.addNewMovies(movies);
     }

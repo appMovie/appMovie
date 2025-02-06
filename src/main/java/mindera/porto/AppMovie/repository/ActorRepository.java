@@ -12,6 +12,6 @@ public interface ActorRepository extends JpaRepository<Actor, Long> {
     @Query("SELECT a FROM Actor a JOIN FETCH a.movies WHERE a.name = :actorName")
     Optional<Actor> findMoviesByActorName(@Param("actorName") String actorName);
 
-    @Query("SELECT a FROM Actor a WHERE a.name=?1")
-    Optional<Actor> findByName(String name);
+//    @Query("SELECT a FROM Actor a WHERE a.name=?1")
+//    Optional<Actor> findByName(String name);
 }

@@ -13,13 +13,11 @@ import java.util.*;
 public class MovieService {
 
     private final MovieRepository movieRepository;
-    private final ActorRepository actorRepository;
 
 
     @Autowired
     public MovieService(MovieRepository movieRepository, ActorRepository actorRepository) {
         this.movieRepository = movieRepository;
-        this.actorRepository = actorRepository;
     }
 
    /* public void addNewMovie(Movie movie) {
@@ -28,25 +26,6 @@ public class MovieService {
     }*/
 
     public void addNewMovies(Set<Movie> movies) {
-
-        for (Movie movie : movies) {
-            //movie.setId(null);
-
-            Set<Actor> updatedActors = new HashSet<>();
-
-            for (Actor actor : movie.getActors()) {
-
-                Optional<Actor> existingActor = actorRepository.findByName(actor.getName());
-
-                if (existingActor.isPresent()) {
-                    updatedActors.add(existingActor.get()); // Reutiliza o ator existente
-                } else {
-                    updatedActors.add(actor); // Adiciona um novo ator se não existir
-                }
-            }
-
-            movie.setActors(updatedActors); 
-        }
 
         movieRepository.saveAll(movies);
     }
