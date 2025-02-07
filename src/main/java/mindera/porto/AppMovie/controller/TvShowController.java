@@ -1,7 +1,8 @@
 package mindera.porto.AppMovie.controller;
 
 
-import mindera.porto.AppMovie.model.TvShow;
+import mindera.porto.AppMovie.dto.tvShowDto.TvShowCreateDto;
+import mindera.porto.AppMovie.dto.tvShowDto.TvShowReadDto;
 import mindera.porto.AppMovie.repository.DirectorRepository;
 import mindera.porto.AppMovie.repository.TvShowRepository;
 import mindera.porto.AppMovie.service.TvShowService;
@@ -22,25 +23,24 @@ public class TvShowController {
     @Autowired
     private DirectorRepository directorRepository;
 
-    @PostMapping("/add")
-    public void addTvShow(@RequestBody TvShow tvShow) {
-        tvShowService.saveOrUpdateTvShow(tvShow);
+    @PostMapping("")
+    public TvShowReadDto addTvShow(@RequestBody TvShowCreateDto tvShowCreateDto) {
+        return tvShowService.saveOrUpdateTvShow(tvShowCreateDto);
     }
 
     @GetMapping("/list")
-    public List<TvShow> getAllTVShows() {
+    public List<TvShowReadDto> getAllTVShows() {
         return tvShowService.getAllTVShows();
     }
 
     @GetMapping("/{id}")
-    public TvShow getTvShow(@PathVariable Long id) {
+    public TvShowReadDto getTvShow(@PathVariable Long id) {
         return tvShowService.getTvShow(id);
     }
 
     @PutMapping("/{id}")
-    public void updateTvShow(@PathVariable Long id, @RequestBody TvShow tvShow) {
-        tvShow.setId(id);  // Garantir que o ID passado é usado
-        tvShowService.saveOrUpdateTvShow(tvShow);
+    public TvShowReadDto updateTvShow(@PathVariable Long id, @RequestBody TvShowCreateDto tvShowCreateDto) {
+        return tvShowService.saveOrUpdateTvShow(tvShowCreateDto);
     }
 
     @DeleteMapping("/{id}")
@@ -49,17 +49,17 @@ public class TvShowController {
     }
 
 //    @GetMapping("/actor/{actorId}")
-//    public List<TvShow> getTvShowsByActor(@PathVariable Long actorId) {
+//    public List<TvShowReadDto> getTvShowsByActor(@PathVariable Long actorId) {
 //        return tvShowService.getTvShowsByActor(actorId);
 //    }
 //
 //    @GetMapping("/review/{reviewId}")
-//    public List<TvShow> getTvShowsByReview(@PathVariable Long reviewId) {
+//    public List<TvShowReadDto> getTvShowsByReview(@PathVariable Long reviewId) {
 //        return tvShowService.getTvShowsByReview(reviewId);
 //    }
 
     @GetMapping("/director/{directorId}")
-    public List<TvShow> getTvShowsByDirector(@PathVariable Long directorId) {
+    public List<TvShowReadDto> getTvShowsByDirector(@PathVariable Long directorId) {
         return tvShowService.getTvShowsByDirector(directorId);
     }
 }
