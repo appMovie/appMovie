@@ -1,4 +1,59 @@
 package mindera.porto.AppMovie.controller;
 
+import mindera.porto.AppMovie.dto.directorDto.DirectorCreateDto;
+import mindera.porto.AppMovie.dto.directorDto.DirectorReadDto;
+import mindera.porto.AppMovie.service.DirectorService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("api/v1/directors")
 public class DirectorController {
+
+    @Autowired
+    private DirectorService directorService;
+
+    // GET /directors/list → Listar todos os diretores
+    @GetMapping("/list")
+    public List<DirectorReadDto> getAllDirectors() {
+        return directorService.getAllDirectors();
+    }
+
+    // GET /directors/{id} → Obter detalhes de um diretor específico
+    @GetMapping("/{id}")
+    public DirectorReadDto getDirector(@PathVariable Long id) {
+        return directorService.getDirector(id);
+    }
+
+    // POST /directors/add → Criar um novo diretor
+    @PostMapping("")
+    public DirectorReadDto addDirector(@RequestBody DirectorCreateDto directorCreateDto) {
+        return directorService.saveOrUpdateDirector(directorCreateDto);
+    }
+
+    // PUT /directors/{id} → Atualizar informações de um diretor
+    @PutMapping("/{id}")
+    public DirectorReadDto updateDirector(@PathVariable Long id, @RequestBody DirectorCreateDto directorCreateDto) {
+        return directorService.saveOrUpdateDirector(directorCreateDto);
+    }
+
+    // DELETE /directors/{id} → Remover um diretor
+    @DeleteMapping("/{id}")
+    public void deleteDirector(@PathVariable Long id) {
+        directorService.deleteDirector(id);
+    }
+
+    // GET /directors/{id}/tvshows → Listar as séries de um diretor
+    @GetMapping("/{id}/tvshows")
+    public List<DirectorReadDto> getDirectorsByTvShow(@RequestParam String tvShow) {
+        return directorService.getDirectorByTvShow(tvShow);
+    }
+
+    // GET /directors/{id}/movies → Listar os filmes de um diretor
+    @GetMapping("/{id}/movies")
+    public List<DirectorReadDto> getDirectorsByMovie(@RequestParam String movie) {
+        return directorService.getDirectorByMovie(movie);
+    }
 }
