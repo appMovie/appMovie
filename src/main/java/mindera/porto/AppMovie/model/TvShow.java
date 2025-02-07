@@ -28,7 +28,12 @@ public class TvShow {
     @JoinColumn(name = "director_id", nullable = false)
     private Director director;
 
-    @ManyToMany(mappedBy = "tvShows")
+    @ManyToMany
+    @JoinTable(
+            name = "actor_tv_show",
+            joinColumns = @JoinColumn(name = "tv_show_id"),
+            inverseJoinColumns = @JoinColumn(name = "actor_id")
+    )
     private List<Actor> actors = new ArrayList<>();
 
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)

@@ -17,14 +17,24 @@ public class ActorController {
         this.actorService = actorService;
     }
 
-
     @PostMapping("")
     public List<Actor> addActors(@RequestBody List<Actor> actors) {
         return actorService.addActors(actors);
     }
 
-    @GetMapping("/{actorId}/movies")
-    public List<Movie> getMoviesByActorName(@PathVariable String actorName) {   // Passar o ID em vez do nome "Long Id"
-        return actorService.getMoviesByActorName(actorName);
+    @GetMapping("")
+    public List<Actor> getAllActors() {
+        return actorService.getAllActors();
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteActor(@PathVariable Long id) {
+        actorService.deleteActorById(id);
+    }
+
+    @GetMapping("/{actorId}/movies")
+    public List<Movie> getMoviesByActor(@PathVariable Long actorId) {
+        return actorService.getMoviesByActor(actorId);
+    }
+
 }

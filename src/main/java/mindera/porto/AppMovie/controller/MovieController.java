@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -35,22 +36,26 @@ public class MovieController {
 
     @GetMapping("/list")
     public List<Movie> getMovies() {
+
         return movieService.getMovies();
     }
 
     @GetMapping("/id/{id}")
     public List<Movie> getMovieById(@PathVariable List<Long> id) {
+
         return movieService.getMovieById(id);
     }
 
     @DeleteMapping("/{id}")
     public void deleteMovieById(@PathVariable Long id) {
+
         movieService.deleteMovieById(id);
     }
 
-    @PutMapping("/{id}")
-    public void updateMovie(@PathVariable Long id, @RequestBody Movie movie) {
-        movieService.updateMovie(id, movie);
+    @PutMapping("/{movieId}")
+    public void updateMovie(@PathVariable Long movieId, @RequestBody Movie updatedMovie) {
+
+        movieService.updateMovie(movieId, updatedMovie);
     }
 
     @GetMapping("/name/{name}")
@@ -64,6 +69,16 @@ public class MovieController {
         }
     }
 
+    @PostMapping("/{movieId}/{actorIds}")
+    public Movie addActorsToMovie(@PathVariable Long movieId, @PathVariable String actorIds) {
 
+        String[] actorIdStrings = actorIds.split(",");
+        List<Long> actorIdList = new ArrayList<>();
+        for (String actorIdString : actorIdStrings) {
+
+            actorIdList.add(Long.parseLong(actorIdString.trim()));
+        }
+        return movieService.addActorsToMovie(movieId, actorIdList);
+    }
 
 }
