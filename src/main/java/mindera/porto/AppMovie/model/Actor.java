@@ -1,5 +1,6 @@
 package mindera.porto.AppMovie.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -16,13 +17,42 @@ public class Actor {
     private String name;
 
     @ManyToMany(mappedBy = "actors")
+    @JsonIgnore
     private List<Movie> movies = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "actor_tv_show",
-            joinColumns = @JoinColumn(name = "actor_id"),
-            inverseJoinColumns = @JoinColumn(name = "tv_show_id")
-    )
+    @ManyToMany(mappedBy = "actors")
+    @JsonIgnore
     private List<TvShow> tvShows = new ArrayList<>();
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public List<Movie> getMovies() {
+        return movies;
+    }
+
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
+    }
+
+    public List<TvShow> getTvShows() {
+        return tvShows;
+    }
+
+    public void setTvShows(List<TvShow> tvShows) {
+        this.tvShows = tvShows;
+    }
 }
