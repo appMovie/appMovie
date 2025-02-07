@@ -20,12 +20,8 @@ public class Actor {
     @JsonIgnore
     private List<Movie> movies = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "actor_tv_show",
-            joinColumns = @JoinColumn(name = "actor_id"),
-            inverseJoinColumns = @JoinColumn(name = "tv_show_id")
-    )
+    @ManyToMany(mappedBy = "actors")
+    @JsonIgnore
     private List<TvShow> tvShows = new ArrayList<>();
 
     public Long getId() {
