@@ -1,11 +1,12 @@
 package mindera.porto.AppMovie.service;
 
-
-import jakarta.transaction.Transactional;
+import mindera.porto.AppMovie.exception.director.DirectorAlreadyExistsException;
+import mindera.porto.AppMovie.exception.director.DirectorNotFoundException;
+import mindera.porto.AppMovie.exception.director.DirectorNotFoundMovieException;
+import mindera.porto.AppMovie.exception.director.DirectorNotFoundTvShowException;
 import mindera.porto.AppMovie.model.Director;
 import mindera.porto.AppMovie.repository.DirectorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +28,7 @@ public class DirectorService {
     }
     // GET /directors/{id} → Obter detalhes de um diretor específico
     public Director getDirector(Long id){
-        return directorRepository.findById(id).orElseThrow(() -> new IllegalStateException("Director with id " + id + " does not exist"));
+        return directorRepository.findById(id).orElseThrow(() -> new DirectorNotFoundException());
     }
 
     //PUT /directors/{id} → Atualizar informações de um diretor // POST /directors/add → Criar um novo diretor
@@ -35,7 +36,7 @@ public class DirectorService {
         if (director.getId()==null){
             Optional<Director> existingDirector= directorRepository.findByName(director.getName());
             if(existingDirector.isPresent()){
-                throw  new DataIntegrityViolationException("Director already exists");
+                throw  new DirectorAlreadyExistsException();
             }
         }
         directorRepository.save(director);
@@ -52,7 +53,7 @@ public class DirectorService {
     public List<Director> getDirectorByTvShow (String tvShow){
         List<Director> directors =directorRepository.findByTvShows_Name(tvShow);
         if (directors.isEmpty()){
-            throw new IllegalStateException("No directores found for TVShow" + tvShow);
+            throw new DirectorNotFoundTvShowException(tvShow);
         }
         return directors;
     }
@@ -61,7 +62,7 @@ public class DirectorService {
     public List<Director> getDirectorByMovie (String movie){
         List<Director> directors =directorRepository.findByMovies_Name(movie);
         if (directors.isEmpty()){
-            throw new IllegalStateException("No directors found for Movie" + movie);
+            throw new DirectorNotFoundMovieException(movie);
         }
         return directors;
     }

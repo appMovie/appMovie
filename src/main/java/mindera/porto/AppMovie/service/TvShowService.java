@@ -1,11 +1,10 @@
 package mindera.porto.AppMovie.service;
 
-
-import mindera.porto.AppMovie.model.Review;
+import mindera.porto.AppMovie.exception.tvShow.TvShowAlreadyExistsException;
+import mindera.porto.AppMovie.exception.tvShow.TvShowNotFoundDirectorException;
 import mindera.porto.AppMovie.model.TvShow;
 import mindera.porto.AppMovie.repository.TvShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,7 @@ public class TvShowService {
         if (tvShow.getId()==null){
             Optional<TvShow> existingTvShow = tvShowRepository.findByName(tvShow.getName());
             if(existingTvShow.isPresent()){
-                throw  new DataIntegrityViolationException("TvShow already exists");
+                throw  new TvShowAlreadyExistsException();
             }
         }
         tvShowRepository.save(tvShow);
@@ -48,28 +47,28 @@ public class TvShowService {
     }
 
     //GET /tvshows/{id}/actors → Listar os atores de uma série
-    public List<TvShow> getTvShowsByActor(String actorName) {
-        List<TvShow> tvShows = tvShowRepository.findByActors_Name(actorName);
-        if (tvShows.isEmpty()) {
-            throw new IllegalStateException("No TV Shows found for actor " + actorName);
-        }
-        return tvShows;
-    }
+//    public List<TvShow> getTvShowsByActor(Long actorId) {
+//        List<TvShow> tvShows = tvShowRepository.findById(id);
+//        if (tvShows.isEmpty()) {
+//            throw new TvShowNotFoundActorException(actorId);
+//        }
+//        return tvShows;
+//    }
 
     //GET /tvshows/{id}/reviews → Listar as avaliações de uma série
-    public List<TvShow> getTvShowsByReview(String reviewText) {
-        List<TvShow> tvShows = tvShowRepository.findByReviews_Comment(reviewText);
-        if (tvShows.isEmpty()) {
-            throw new IllegalStateException("No TV Shows found with review: " + reviewText);
-        }
-        return tvShows;
-    }
+//    public List<TvShow> getTvShowsByReview(Long reviewId) {
+//        List<TvShow> tvShows = tvShowRepository.findByReview_Id(reviewId);
+//        if (tvShows.isEmpty()) {
+//            throw new TvShowNotFoundReviewException(reviewId);
+//        }
+//        return tvShows;
+//    }
 
     //GET /tvshows/director/{directorId} → Listar todas as séries de um diretor
     public List<TvShow> getTvShowsByDirector(Long directorId) {
         List<TvShow> tvShows = tvShowRepository.findByDirector_Id(directorId);
         if (tvShows.isEmpty()) {
-            throw new IllegalStateException("No TV Shows found for director ID " + directorId);
+            throw new TvShowNotFoundDirectorException(directorId);
         }
         return tvShows;
     }

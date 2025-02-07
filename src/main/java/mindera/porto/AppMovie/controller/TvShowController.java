@@ -48,15 +48,15 @@ public class TvShowController {
         tvShowService.deleteTvShow(id);
     }
 
-    @GetMapping("/actor/{actorName}")
-    public List<TvShow> getTvShowsByActor(@PathVariable String actorName) {
-        return tvShowService.getTvShowsByActor(actorName);
-    }
-
-    @GetMapping("/review/{reviewText}")
-    public List<TvShow> getTvShowsByReview(@PathVariable String reviewText) {
-        return tvShowService.getTvShowsByReview(reviewText);
-    }
+//    @GetMapping("/actor/{actorId}")
+//    public List<TvShow> getTvShowsByActor(@PathVariable Long actorId) {
+//        return tvShowService.getTvShowsByActor(actorId);
+//    }
+//
+//    @GetMapping("/review/{reviewId}")
+//    public List<TvShow> getTvShowsByReview(@PathVariable Long reviewId) {
+//        return tvShowService.getTvShowsByReview(reviewId);
+//    }
 
     @GetMapping("/director/{directorId}")
     public List<TvShow> getTvShowsByDirector(@PathVariable Long directorId) {
