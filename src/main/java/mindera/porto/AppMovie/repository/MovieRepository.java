@@ -13,6 +13,7 @@ public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     boolean existsByName(String name);
     Optional<Movie> findByName(String name);
+    List<Movie> findByDirectorId(Long directorId);
 
     @Query("SELECT m FROM Movie m JOIN m.actors a WHERE a.id = :actorId")
     List<Movie> findMoviesByActorId(@Param("actorId") Long actorId);

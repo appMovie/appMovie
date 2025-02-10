@@ -14,16 +14,16 @@ public class TvShow {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = false)
     private String name;
 
     @Column(nullable = false)
     private int year;
 
-    @Column(nullable = false)
+    @Column(unique = false)
     private String description;
 
-    @Column(nullable = false)
+    @Column(unique = false)
     private String imageUrl;
 
     @ManyToOne

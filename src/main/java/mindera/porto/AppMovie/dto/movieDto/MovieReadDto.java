@@ -1,6 +1,8 @@
 package mindera.porto.AppMovie.dto.movieDto;
 
 import mindera.porto.AppMovie.dto.actorDto.ActorReadDto;
+import mindera.porto.AppMovie.dto.directorDto.DirectorReadDto;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewReadDto;
 
 import java.util.List;
 
@@ -10,7 +12,11 @@ public class MovieReadDto {
     private String name;
     private int year;
     private String description;
+
     private List<ActorReadDto> actors;
+    private DirectorReadDto director;
+
+    private List<ReviewReadDto> reviews ;
 
 
     public Long getId() {
@@ -51,5 +57,20 @@ public class MovieReadDto {
 
     public void setActors(List<ActorReadDto> actors) {
         this.actors = actors;
+    }
+
+    public DirectorReadDto getDirector() {
+        return director;
+    }
+    public void setDirector(DirectorReadDto director) {
+        this.director = director;
+    }
+
+    public List<ReviewReadDto> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<ReviewReadDto> reviews) {
+        this.reviews = reviews;
     }
 }

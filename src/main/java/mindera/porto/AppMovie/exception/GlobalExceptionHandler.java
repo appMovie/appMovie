@@ -2,6 +2,10 @@ package mindera.porto.AppMovie.exception;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.EntityNotFoundException;
+import mindera.porto.AppMovie.exception.movie.MovieAlreadyExistsExpception;
+import mindera.porto.AppMovie.exception.movie.MovieException;
+import mindera.porto.AppMovie.exception.movie.MovieNotFoundActorException;
+import mindera.porto.AppMovie.exception.movie.MovieNotFoundExcption;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -39,13 +43,31 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("Malformed JSON request", HttpStatus.BAD_REQUEST);
     }
 
-    //Erro 500 ao criar tvShow
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<Object> handleGeneralException(Exception e) {
-        e.printStackTrace();
-        String message = "Something went wrong, please try again later.";
-        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    @ExceptionHandler(MovieException.class)
+    public ResponseEntity<String> handleMovieNotFoundException(MovieException e){
+       if (e instanceof MovieNotFoundExcption m){
+           return new ResponseEntity<>(m.getMessage(),HttpStatus.NOT_FOUND);
+       }
+
+       return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(MovieAlreadyExistsExpception.class)
+    public ResponseEntity<String> handleMovieAlreadyExistsExpception(MovieAlreadyExistsExpception e){
+       return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MovieNotFoundActorException.class)
+    public ResponseEntity<String> handleMovieNotFoundActorException(MovieNotFoundActorException e){
+        return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+    }
+
+
+
+
+
+
+
 
 
 

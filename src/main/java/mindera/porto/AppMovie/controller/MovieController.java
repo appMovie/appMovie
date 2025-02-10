@@ -1,8 +1,10 @@
 package mindera.porto.AppMovie.controller;
 
+import jakarta.validation.Valid;
 import mindera.porto.AppMovie.dto.movieDto.MovieCreateDto;
 import mindera.porto.AppMovie.dto.movieDto.MovieReadDto;
 import mindera.porto.AppMovie.dto.movieDto.MovieUpdateDto;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewCreateDto;
 import mindera.porto.AppMovie.model.Movie;
 import mindera.porto.AppMovie.service.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,7 +82,7 @@ public class MovieController {
         return movieService.searchMoviesByName(name);
     }
 
-    // Endpoint para pesquisar filmes por nome de ator
+    // Pesquisar filmes por nome de ator
     @GetMapping("/search/byActor")
     public List<MovieReadDto> searchMoviesByActorName(@RequestParam("actorName") String actorName) {
         return movieService.searchMoviesByActorName(actorName);
@@ -91,6 +93,24 @@ public class MovieController {
             @RequestParam("startYear") int startYear,
             @RequestParam("endYear") int endYear) {
         return movieService.searchMoviesBetweenYears(startYear, endYear);
+    }
+
+    //Director Endpoints
+
+    @PostMapping("/{movieId}/director/{directorId}")
+    public MovieReadDto addDirectorToMovie(@PathVariable Long movieId, @PathVariable Long directorId) {
+        return movieService.addDirectorToMovie(movieId, directorId);
+    }
+
+    @GetMapping("/director/{directorId}")
+    public List<MovieReadDto> getMoviesByDirectorId(@PathVariable Long directorId) {
+        return movieService.getMoviesByDirectorId(directorId);
+    }
+
+    //Reviews
+    @PostMapping("/{movieId}/reviews")
+    public MovieReadDto addReviewToMovie(@PathVariable Long movieId, @Valid @RequestBody ReviewCreateDto reviewDto) {
+        return movieService.addReviewToMovie(movieId, reviewDto);
     }
 
 }

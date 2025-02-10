@@ -3,6 +3,7 @@ package mindera.porto.AppMovie.controller;
 import mindera.porto.AppMovie.dto.movieDto.MovieCreateDto;
 import mindera.porto.AppMovie.dto.movieDto.MovieReadDto;
 import mindera.porto.AppMovie.dto.movieDto.MovieUpdateDto;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewCreateDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -221,5 +222,104 @@ public class MovieControllerTest extends BaseControllerTest{
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].name").value("Year Range Movie"));
     }
+
+    // Test for adding a director to a movie.
+    @Test
+    public void testAddDirectorToMovie() throws Exception {
+        // First, create a new movie via the POST /api/v1/movies/add endpoint.
+        MovieCreateDto movieDto = new MovieCreateDto();
+        movieDto.setName("Movie for Director");
+        movieDto.setYear(2021);
+        movieDto.setDescription("A movie to test director assignment");
+        movieDto.setImageUrl("http://example.com/movie.jpg");
+
+        String movieResponse = mockMvcM.perform(post("/api/v1/movies/add")
+                                                       .contentType(MediaType.APPLICATION_JSON)
+                                                       .content(objectMapper.writeValueAsString(movieDto)))
+                                       .andExpect(status().isOk())
+                                       .andReturn().getResponse().getContentAsString();
+
+        MovieReadDto createdMovie = objectMapper.readValue(movieResponse, MovieReadDto.class);
+        Long movieId = createdMovie.getId();
+
+        // Now add a director (assume director with id 1 exists)
+        Long directorId = 1L;
+        String updatedMovieResponse = mockMvcM.perform(post("/api/v1/movies/" + movieId + "/director/" + directorId)
+                                                              .contentType(MediaType.APPLICATION_JSON))
+                                              .andExpect(status().isOk())
+                                              .andExpect(jsonPath("$.director.id").value(directorId))
+                                              .andReturn().getResponse().getContentAsString();
+
+
+    }
+
+    // Test for retrieving movies by director ID.
+    @Test
+    public void testGetMoviesByDirectorId() throws Exception {
+        // Create a movie and assign a director to it.
+        MovieCreateDto movieDto = new MovieCreateDto();
+        movieDto.setName("Movie for Director Query");
+        movieDto.setYear(2021);
+        movieDto.setDescription("A movie to test getMoviesByDirectorId");
+        movieDto.setImageUrl("http://example.com/movie.jpg");
+
+        String movieResponse = mockMvcM.perform(post("/api/v1/movies/add")
+                                                       .contentType(MediaType.APPLICATION_JSON)
+                                                       .content(objectMapper.writeValueAsString(movieDto)))
+                                       .andExpect(status().isOk())
+                                       .andReturn().getResponse().getContentAsString();
+
+        MovieReadDto createdMovie = objectMapper.readValue(movieResponse, MovieReadDto.class);
+        Long movieId = createdMovie.getId();
+
+        // Assign a director to the movie.
+        Long directorId = 1L;
+        mockMvcM.perform(post("/api/v1/movies/" + movieId + "/director/" + directorId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        // Retrieve movies by director ID.
+        mockMvcM.perform(get("/api/v1/movies/director/" + directorId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                // Verify that the returned movie has the correct director id.
+                .andExpect(jsonPath("$[0].director.id").value(directorId));
+    }
+
+    // Test for adding a review to a movie.
+    @Test
+    public void testAddReviewToMovie() throws Exception {
+        // Create a new movie.
+        MovieCreateDto movieDto = new MovieCreateDto();
+        movieDto.setName("Movie for Review");
+        movieDto.setYear(2021);
+        movieDto.setDescription("A movie to test reviews");
+        movieDto.setImageUrl("http://example.com/movie.jpg");
+
+        String movieResponse = mockMvcM.perform(post("/api/v1/movies/add")
+                                                       .contentType(MediaType.APPLICATION_JSON)
+                                                       .content(objectMapper.writeValueAsString(movieDto)))
+                                       .andExpect(status().isOk())
+                                       .andReturn().getResponse().getContentAsString();
+
+        MovieReadDto createdMovie = objectMapper.readValue(movieResponse, MovieReadDto.class);
+        Long movieId = createdMovie.getId();
+
+        // Prepare a review payload.
+        ReviewCreateDto reviewDto = new ReviewCreateDto();
+        reviewDto.setComment("Great movie, highly recommended!");
+        reviewDto.setRating(8);
+
+        // Call the endpoint to add the review.
+        String updatedMovieResponse = mockMvcM.perform(post("/api/v1/movies/" + movieId + "/reviews")
+                                                              .contentType(MediaType.APPLICATION_JSON)
+                                                              .content(objectMapper.writeValueAsString(reviewDto)))
+                                              .andExpect(status().isOk())
+                                              // Verify that the first review in the list has the expected comment and rating.
+                                              .andExpect(jsonPath("$.reviews[0].comment").value("Great movie, highly recommended!"))
+                                              .andExpect(jsonPath("$.reviews[0].rating").value(8))
+                                              .andReturn().getResponse().getContentAsString();
+    }
+
 
 }

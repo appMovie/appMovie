@@ -22,6 +22,7 @@ import mindera.porto.AppMovie.repository.ActorRepository;
 import mindera.porto.AppMovie.repository.DirectorRepository;
 import mindera.porto.AppMovie.repository.TvShowRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
@@ -66,6 +67,17 @@ public class TvShowService {
         TvShow tvShow= tvShowRepository.findById(id)
                 .orElseThrow(()-> new TvShowNotFoundException());
         return TvShowMapper.fromTvShowToTvShowReadDto(tvShow);
+    }
+
+    //PUT /tvshows/{id} → Atualizar informações de uma série //POST /tvshows/add → Criar uma nova série
+    public TvShowReadDto saveOrUpdateTvShow (TvShowCreateDto tvShowCreateDto){
+        TvShow tvShow=TvShowMapper.fromTvShowCreateDtoToTvShow(tvShowCreateDto);
+
+        if(tvShowRepository.existsById(tvShow.getId())){
+            throw  new TvShowAlreadyExistsException();
+        }
+        TvShow savedTvShow = tvShowRepository.save(tvShow);
+        return TvShowMapper.fromTvShowToTvShowReadDto(savedTvShow);
     }
 
     //DELETE /tvshows/{id} → Remover uma série

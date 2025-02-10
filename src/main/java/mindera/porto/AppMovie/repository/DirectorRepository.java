@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface DirectorRepository extends JpaRepository<Director, Long> {
+    boolean existsByName(String name);
     Optional<Director> findByName (String name);
     List<Director> findByTvShows_Name(String tvShow);
     List<Director> findByMovies_Name(String movie);

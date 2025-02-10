@@ -23,9 +23,22 @@ public class MovieMapper {
         if (movie.getActors() != null && !movie.getActors().isEmpty()) {
             List<ActorReadDto> actorDtos = movie.getActors().stream()
                                                    .map(ActorMapper::fromActorToActorReadDto)
-                                                   .collect(Collectors.toList());
+                                                   .toList();
             movieReadDto.setActors(actorDtos);
         }
+
+        // Map the single director
+        if (movie.getDirector() != null) {
+            movieReadDto.setDirector(DirectorMapper.fromDirectorToDirectorReadDto(movie.getDirector()));
+        }
+
+        //Mapp para as Reviews
+        if (movie.getReviews() != null && !movie.getReviews().isEmpty()) {
+            movieReadDto.setReviews(movie.getReviews().stream()
+                                   .map(ReviewMapper::fromReviewToReviewReadDto)
+                                   .collect(Collectors.toList()));
+        }
+
         return movieReadDto;
     }
 
