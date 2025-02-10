@@ -2,8 +2,8 @@ package mindera.porto.AppMovie.model;
 
 import jakarta.persistence.*;
 
-@Entity
-@Table(name = "reviews")
+@Entity(name = "reviews")
+@Table
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
