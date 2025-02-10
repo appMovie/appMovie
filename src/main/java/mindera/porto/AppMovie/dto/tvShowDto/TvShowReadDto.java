@@ -1,11 +1,17 @@
 package mindera.porto.AppMovie.dto.tvShowDto;
 
+import mindera.porto.AppMovie.dto.actorDto.ActorReadDto;
+import mindera.porto.AppMovie.model.Director;
+
+import java.util.List;
+
 public class TvShowReadDto {
     private Long id;
     private String name;
     private int year;
     private String description;
-    private String imageUrl;
+    private Director director;
+    private List<ActorReadDto> actors;
 
     public Long getId() {
         return id;
@@ -39,11 +45,19 @@ public class TvShowReadDto {
         this.description = description;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public Director getDirector() {
+        return director;
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
+    public List<ActorReadDto> getActors() {
+        return actors;
+    }
+
+    public void setActors(List<ActorReadDto> actors) {
+        this.actors = actors;
     }
 }

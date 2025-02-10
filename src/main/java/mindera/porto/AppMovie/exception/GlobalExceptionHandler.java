@@ -39,6 +39,14 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>("Malformed JSON request", HttpStatus.BAD_REQUEST);
     }
 
+    //Erro 500 ao criar tvShow
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<Object> handleGeneralException(Exception e) {
+        e.printStackTrace();
+        String message = "Something went wrong, please try again later.";
+        return new ResponseEntity<>(message, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
 
 

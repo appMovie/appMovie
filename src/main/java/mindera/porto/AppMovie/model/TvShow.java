@@ -1,9 +1,11 @@
 package mindera.porto.AppMovie.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "tv_shows")
@@ -25,19 +27,20 @@ public class TvShow {
     private String imageUrl;
 
     @ManyToOne
-    @JoinColumn(name = "director_id", nullable = false)
+    @JoinColumn(name = "director_id")
     private Director director;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "actor_tv_show",
-            joinColumns = @JoinColumn(name = "tv_show_id"),
+            name = "tvShow_actor",
+            joinColumns = @JoinColumn(name = "tvShow_id"),
             inverseJoinColumns = @JoinColumn(name = "actor_id")
     )
-    private List<Actor> actors = new ArrayList<>();
+    private Set<Actor> actors = new HashSet<>();
 
     @OneToMany(mappedBy = "tvShow", cascade = CascadeType.ALL)
     private List<Review> reviews = new ArrayList<>();
+
 
     public Long getId() {
         return id;
@@ -87,11 +90,12 @@ public class TvShow {
         this.director = director;
     }
 
-    public List<Actor> getActors() {
+
+    public Set<Actor> getActors() {
         return actors;
     }
 
-    public void setActors(List<Actor> actors) {
+    public void setActors(Set<Actor> actors) {
         this.actors = actors;
     }
 

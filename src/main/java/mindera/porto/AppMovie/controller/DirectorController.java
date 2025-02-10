@@ -12,7 +12,7 @@ import java.util.List;
 @RequestMapping("api/v1/directors")
 public class DirectorController {
 
-    @Autowired
+    @Autowired //Injeçao da dependencia automática, sem precisar de construtor
     private DirectorService directorService;
 
     // GET /directors/list → Listar todos os diretores
@@ -28,32 +28,21 @@ public class DirectorController {
     }
 
     // POST /directors/add → Criar um novo diretor
-    @PostMapping("")
+    @PostMapping("/")
     public DirectorReadDto addDirector(@RequestBody DirectorCreateDto directorCreateDto) {
-        return directorService.saveOrUpdateDirector(directorCreateDto);
+        return directorService.addDirector(directorCreateDto);
     }
 
     // PUT /directors/{id} → Atualizar informações de um diretor
     @PutMapping("/{id}")
     public DirectorReadDto updateDirector(@PathVariable Long id, @RequestBody DirectorCreateDto directorCreateDto) {
-        return directorService.saveOrUpdateDirector(directorCreateDto);
+        return directorService.updateDirector(id, directorCreateDto);
     }
+
 
     // DELETE /directors/{id} → Remover um diretor
     @DeleteMapping("/{id}")
     public void deleteDirector(@PathVariable Long id) {
         directorService.deleteDirector(id);
-    }
-
-    // GET /directors/{id}/tvshows → Listar as séries de um diretor
-    @GetMapping("/{id}/tvshows")
-    public List<DirectorReadDto> getDirectorsByTvShow(@RequestParam String tvShow) {
-        return directorService.getDirectorByTvShow(tvShow);
-    }
-
-    // GET /directors/{id}/movies → Listar os filmes de um diretor
-    @GetMapping("/{id}/movies")
-    public List<DirectorReadDto> getDirectorsByMovie(@RequestParam String movie) {
-        return directorService.getDirectorByMovie(movie);
     }
 }
