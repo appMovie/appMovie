@@ -3,18 +3,23 @@ package mindera.porto.AppMovie.service;
 import mindera.porto.AppMovie.dto.movieDto.MovieCreateDto;
 import mindera.porto.AppMovie.dto.movieDto.MovieReadDto;
 import mindera.porto.AppMovie.dto.movieDto.MovieUpdateDto;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewCreateDto;
+import mindera.porto.AppMovie.exception.director.DirectorAlreadyExistsException;
+import mindera.porto.AppMovie.exception.director.DirectorNotFoundException;
 import mindera.porto.AppMovie.exception.movie.MovieAlreadyExistsExpception;
 import mindera.porto.AppMovie.exception.movie.MovieNotFoundExcption;
 import mindera.porto.AppMovie.mapper.MovieMapper;
+import mindera.porto.AppMovie.mapper.ReviewMapper;
 import mindera.porto.AppMovie.model.Actor;
+import mindera.porto.AppMovie.model.Director;
 import mindera.porto.AppMovie.model.Movie;
+import mindera.porto.AppMovie.model.Review;
 import mindera.porto.AppMovie.repository.ActorRepository;
+import mindera.porto.AppMovie.repository.DirectorRepository;
 import mindera.porto.AppMovie.repository.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,11 +29,13 @@ public class MovieService {
 
     private final MovieRepository movieRepository;
     private final ActorRepository actorRepository;
+    private final DirectorRepository directorRepository;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository) {
+    public MovieService(MovieRepository movieRepository, ActorRepository actorRepository, DirectorRepository directorRepository) {
         this.movieRepository = movieRepository;
         this.actorRepository= actorRepository;
+        this.directorRepository = directorRepository;
     }
 
 
@@ -43,20 +50,6 @@ public class MovieService {
         }
     }
 
-
-//    public List<MovieReadDto> addNewMovies(Set<MovieCreateDto> moviesCreateDto) {
-//
-//        Set<Movie> movies = moviesCreateDto.stream()
-//                                    .map(MovieMapper::fromMovieCreateDtoToMovie)
-//                                    .collect(Collectors.toSet());
-//
-//        List<Movie> savedMovies = movieRepository.saveAll(movies);
-//
-//        return savedMovies.stream()
-//                       .map(MovieMapper::fromMovieToMovieReadDto)
-//                       .collect(Collectors.toList());
-//
-//    }
 
     public List<MovieReadDto> addNewMovies(Set<MovieCreateDto> moviesCreateDto) {
         Set<Movie> moviesToSave = new HashSet<>();
@@ -81,7 +74,8 @@ public class MovieService {
 
         return movieRepository.findAll()
                        .stream()
-                       .map(MovieMapper::fromMovieToMovieReadDto)
+                       //.map(MovieMapper::fromMovieToMovieReadDto)
+                       .map(movie -> MovieMapper.fromMovieToMovieReadDto(movie))
                        .toList();
     }
 
@@ -177,5 +171,69 @@ public class MovieService {
                        .map(MovieMapper::fromMovieToMovieReadDto)
                        .toList();
     }
+
+
+    // Métodos do Director
+
+    public MovieReadDto addDirectorToMovie(Long movieId, Long directorId) {
+
+        Movie movie = movieRepository.findById(movieId)
+                              .orElseThrow(() -> new MovieNotFoundExcption("Movie not found"));
+
+
+        Director director = directorRepository.findById(directorId)
+                                    .orElseThrow(DirectorNotFoundException::new);
+
+
+        if (movie.getDirector() != null) {
+            throw new DirectorAlreadyExistsException();
+        }
+
+        movie.setDirector(director);
+        movie = movieRepository.save(movie);
+
+        return MovieMapper.fromMovieToMovieReadDto(movie);
+    }
+
+    public List<MovieReadDto> getMoviesByDirectorId(Long directorId) {
+        // First, verify that the director exists
+        if (!directorRepository.existsById(directorId)) {
+            throw new DirectorNotFoundException();
+        }
+
+        // Retrieve movies by director ID
+        List<Movie> movies = movieRepository.findByDirectorId(directorId);
+
+        if (movies.isEmpty()) {
+            throw new MovieNotFoundExcption("No movies found for director with id: " + directorId);
+        }
+        // Map each movie entity to a MovieReadDto and return the list
+        return movies.stream()
+                       .map(MovieMapper::fromMovieToMovieReadDto)
+                       .toList();
+    }
+
+    // Adicionar uma Review
+
+    public MovieReadDto addReviewToMovie(Long movieId, ReviewCreateDto reviewDto) {
+
+        Movie movie = movieRepository.findById(movieId)
+                              .orElseThrow(() -> new MovieNotFoundExcption("Movie not found with id: " + movieId));
+
+        // Converte o ReviewCreateDto em uma entidade Review
+        Review review = ReviewMapper.fromReviewCreateDtoToReview(reviewDto);
+
+        review.setMovie(movie);
+
+        movie.getReviews().add(review);
+
+        movie = movieRepository.save(movie);
+
+        // Converte o filme atualizado para um DTO e retorna
+        return MovieMapper.fromMovieToMovieReadDto(movie);
+    }
+
+
+
 
 }

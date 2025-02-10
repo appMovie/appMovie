@@ -42,11 +42,14 @@ public class DirectorService {
 
     //PUT /directors/{id} → Atualizar informações de um diretor // POST /directors/add → Criar um novo diretor
     public DirectorReadDto saveOrUpdateDirector (DirectorCreateDto directorCreateDto){
-        Director director= DirectorMapper.fromDirectorCreateDtoToDirector(directorCreateDto);
 
-        if (directorRepository.existsById(director.getId())){
-            throw  new DirectorAlreadyExistsException();
+        Director director = DirectorMapper.fromDirectorCreateDtoToDirector(directorCreateDto);
+
+        // Check if a director with the given name already exists.
+        if (directorRepository.existsByName(director.getName())) {
+            throw new DirectorAlreadyExistsException();
         }
+
         Director savedDirector = directorRepository.save(director);
         return DirectorMapper.fromDirectorToDirectorReadDto(savedDirector);
     }

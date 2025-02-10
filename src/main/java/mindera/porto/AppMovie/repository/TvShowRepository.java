@@ -13,6 +13,6 @@ public interface TvShowRepository extends JpaRepository<TvShow, Long> {
     List<TvShow> findByActors_Name(String actorName);
     List<TvShow> findByReviews_Comment(String reviewText);
     List<TvShow> findByDirector_Id(Long directorId);
+
+    boolean existsByName(String name);
 }
-
-
