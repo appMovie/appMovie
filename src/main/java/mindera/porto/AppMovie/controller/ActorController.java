@@ -1,5 +1,8 @@
 package mindera.porto.AppMovie.controller;
 
+import mindera.porto.AppMovie.dto.actorDto.ActorCreateDto;
+import mindera.porto.AppMovie.dto.actorDto.ActorReadDto;
+import mindera.porto.AppMovie.dto.actorDto.ActorUpdateDto;
 import mindera.porto.AppMovie.model.Actor;
 import mindera.porto.AppMovie.model.Movie;
 import mindera.porto.AppMovie.service.ActorService;
@@ -17,13 +20,18 @@ public class ActorController {
         this.actorService = actorService;
     }
 
+    @PostMapping("/add")
+    public ActorReadDto addActor(@RequestBody ActorCreateDto actorCreateDto) {
+        return actorService.addActor(actorCreateDto);
+    }
+
     @PostMapping("")
-    public List<Actor> addActors(@RequestBody List<Actor> actors) {
+    public List<ActorReadDto> addActors(@RequestBody List<ActorCreateDto> actors) {
         return actorService.addActors(actors);
     }
 
     @GetMapping("")
-    public List<Actor> getAllActors() {
+    public List<ActorReadDto> getAllActors() {
         return actorService.getAllActors();
     }
 
@@ -32,9 +40,14 @@ public class ActorController {
         actorService.deleteActorById(id);
     }
 
-    @GetMapping("/{actorId}/movies")
-    public List<Movie> getMoviesByActor(@PathVariable Long actorId) {
-        return actorService.getMoviesByActor(actorId);
+    @PutMapping("/{actorId}")
+    public ActorReadDto updateActorById(@PathVariable Long actorId, @RequestBody ActorUpdateDto actorUpdateDto) {
+        return actorService.updateActorById(actorId, actorUpdateDto);
+    }
+
+    @GetMapping("/{actorId}")
+    public ActorReadDto getActorById(@PathVariable Long actorId) {
+        return actorService.getActorById(actorId);
     }
 
 }
