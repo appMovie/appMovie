@@ -6,16 +6,16 @@ import mindera.porto.AppMovie.model.Director;
 
 public class DirectorMapper {
 
-    public static DirectorReadDto fromDirectorToDirectorReadDto (Director director){
-        DirectorReadDto directorReadDto = new DirectorReadDto();
-        directorReadDto.setId(director.getId());
-        directorReadDto.setName(director.getName());
-        return directorReadDto;
+    public static Director fromDirectorCreateDtoToDirector(DirectorCreateDto dto) {
+        Director director = new Director();
+        director.setName(dto.getName());
+        return director;
     }
 
-    public static Director fromDirectorCreateDtoToDirector (DirectorCreateDto directorCreateDto){
-        Director director = new Director();
-        director.setName(directorCreateDto.getName());
-        return director;
+    public static DirectorReadDto fromDirectorToDirectorReadDto(Director director) {
+        DirectorReadDto dto = new DirectorReadDto();
+        dto.setId(director.getId());
+        dto.setName(director.getName());
+        return dto;
     }
 }

@@ -1,7 +1,6 @@
 package mindera.porto.AppMovie.model;
 
 import jakarta.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,5 +42,13 @@ public class Director {
 
     public void setMovies(List<Movie> movies) {
         this.movies = movies;
+    }
+
+    public List<TvShow> getTvShows() {
+        return tvShows;
+    }
+
+    public void setTvShows(List<TvShow> tvShows) {
+        this.tvShows = tvShows;
     }
 }

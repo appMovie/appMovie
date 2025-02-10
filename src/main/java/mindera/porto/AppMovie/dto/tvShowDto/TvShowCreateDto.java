@@ -3,10 +3,19 @@ package mindera.porto.AppMovie.dto.tvShowDto;
 import mindera.porto.AppMovie.model.Director;
 
 public class TvShowCreateDto {
+    private Long id;
     private String name;
     private int year;
     private String description;
-    private Director director;
+    private String imageUrl;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -32,11 +41,11 @@ public class TvShowCreateDto {
         this.description = description;
     }
 
-    public Director getDirector() {
-        return director;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setDirector(Director director) {
-        this.director = director;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
