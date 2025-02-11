@@ -28,15 +28,15 @@ public class TvShowController {
 
     @PostMapping("/")
     public TvShowReadDto addTvShow(@RequestBody TvShowCreateDto tvShowCreateDto) {
-        TvShowReadDto movieReadDto = this.tvShowService.addTvShow(tvShowCreateDto);
+         return this.tvShowService.addTvShow(tvShowCreateDto);
 
-        return movieReadDto;
     }
 
     @GetMapping("/list")
     public List<TvShowReadDto> getAllTVShows() {
         return tvShowService.getAllTVShows();
     }
+
     @GetMapping("/{id}")
     public TvShowReadDto getTvShow(@PathVariable Long id) {
         return tvShowService.getTvShow(id);
@@ -47,12 +47,10 @@ public class TvShowController {
         tvShowService.deleteTvShow(id);
     }
 
-
     @PutMapping("/{id}")
     public TvShowReadDto updateTvShow(@PathVariable Long id, @RequestBody TvShowReadDto tvShowReadDto) {
         return tvShowService.updateTvShowById(id, tvShowReadDto);
     }
-
 
     @GetMapping("/search/byName")
     public List<TvShowReadDto> getTvShowByName( String name) {

@@ -40,7 +40,7 @@ public class DirectorService {
         return DirectorMapper.fromDirectorToDirectorReadDto(director);
     }
 
-    //PUT /directors/{id} → Atualizar informações de um diretor // POST /directors/add → Criar um novo diretor
+    // POST /directors/add → Criar um novo diretor
     public DirectorReadDto saveOrUpdateDirector (DirectorCreateDto directorCreateDto){
 
         Director director = DirectorMapper.fromDirectorCreateDtoToDirector(directorCreateDto);
@@ -52,6 +52,21 @@ public class DirectorService {
 
         Director savedDirector = directorRepository.save(director);
         return DirectorMapper.fromDirectorToDirectorReadDto(savedDirector);
+    }
+
+    // Update
+    public DirectorReadDto updateDirector(Long id, DirectorCreateDto directorCreateDto) {
+        // Verifica se o diretor com o ID fornecido existe
+        Director director = directorRepository.findById(id)
+                                    .orElseThrow(() -> new DirectorNotFoundException());
+
+
+        director.setName(directorCreateDto.getName());
+
+        Director updatedDirector = directorRepository.save(director);
+
+        // Retorna o DTO de leitura atualizado
+        return DirectorMapper.fromDirectorToDirectorReadDto(updatedDirector);
     }
 
 

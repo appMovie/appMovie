@@ -1,11 +1,19 @@
 package mindera.porto.AppMovie.service;
 
+import mindera.porto.AppMovie.model.Movie;
+import mindera.porto.AppMovie.model.Review;
+import mindera.porto.AppMovie.model.TvShow;
 import mindera.porto.AppMovie.model.User;
+import mindera.porto.AppMovie.repository.MovieRepository;
+import mindera.porto.AppMovie.repository.ReviewRepository;
+import mindera.porto.AppMovie.repository.TvShowRepository;
 import mindera.porto.AppMovie.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -62,7 +70,7 @@ public class UserService {
         Movie movie = movieRepository.findById(movieId)
                 .orElseThrow(() -> new IllegalArgumentException("Movie not found!"));
 
-        Review review = new Review(comment, rating, movie, null, user);
+        Review review = new Review();
         return reviewRepository.save(review);
     }
 
@@ -74,7 +82,7 @@ public class UserService {
         TvShow tvShow = tvShowRepository.findById(tvShowId)
                 .orElseThrow(() -> new IllegalArgumentException("TV Show not found!"));
 
-        Review review = new Review(comment, rating, null, tvShow, user);
+        Review review = new Review();
         return reviewRepository.save(review);
     }
 
@@ -83,6 +91,4 @@ public class UserService {
         return reviewRepository.findByUserId(userId);
     }
 
-
 }
-

@@ -2,11 +2,13 @@ package mindera.porto.AppMovie.model;
 
 import jakarta.persistence.*;
 
-@Entity(name= "users")
-@Table
+import java.util.ArrayList;
+import java.util.List;
 
-
+@Entity
+@Table(name = "users")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,20 +23,20 @@ public class User {
     private String email;
 
     @Enumerated(EnumType.STRING)
-
     private Role role;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-
-    private List<Review> reviews;
-
-    public User(){
+    public User() {
     }
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -42,6 +44,7 @@ public class User {
     public String getUsername() {
         return username;
     }
+
     public void setUsername(String username) {
         this.username = username;
     }
@@ -49,6 +52,7 @@ public class User {
     public String getPassword() {
         return password;
     }
+
     public void setPassword(String password) {
         this.password = password;
     }
@@ -56,6 +60,7 @@ public class User {
     public String getEmail() {
         return email;
     }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -63,12 +68,16 @@ public class User {
     public Role getRole() {
         return role;
     }
+
     public void setRole(Role role) {
         this.role = role;
     }
 
+    public List<Review> getReviews() {
+        return reviews;
+    }
 
-    public List<Review> getReviews(){ return reviews; }
-
-    public void setReviews(List<Review> reviews) { this.reviews = reviews;}
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
+    }
 }

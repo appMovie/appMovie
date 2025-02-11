@@ -30,7 +30,7 @@ public class DirectorController {
     // POST /directors/add → Criar um novo diretor
     @PostMapping("/")
     public DirectorReadDto addDirector(@RequestBody DirectorCreateDto directorCreateDto) {
-        return directorService.addDirector(directorCreateDto);
+        return directorService.saveOrUpdateDirector(directorCreateDto);
     }
 
     // PUT /directors/{id} → Atualizar informações de um diretor

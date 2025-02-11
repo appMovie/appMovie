@@ -1,62 +1,53 @@
-package mindera.porto.AppMovie.controller;
+package mindera.porto.AppMovie.service;
 
+import mindera.porto.AppMovie.dto.reviewDto.ReviewCreateDto;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewReadDto;
+import mindera.porto.AppMovie.exception.GlobalExceptionHandler;
+import mindera.porto.AppMovie.mapper.ReviewMapper;
 import mindera.porto.AppMovie.model.Review;
-import mindera.porto.AppMovie.service.ReviewService;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import mindera.porto.AppMovie.repository.ReviewRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-@RestController
-@RequestMapping(path = "api/v1/review")
-@Tag(name = "Review", description = "Review management endpoints")
+@Service
+public class ReviewService {
 
-public class ReviewController {
+    private final ReviewRepository reviewRepository;
 
-    @Autowired
-    private final ReviewService reviewService;
-
-    public ReviewController(ReviewService reviewService) {
-        this.reviewService = reviewService;
-    }
-
-
-    @GetMapping
-    public List<Review> getAllReviews() {
-        return reviewService.getAllReviews();
-    }
-
-    @PostMapping
-    public Review addReview(@RequestBody Review review) {
-        return reviewService.addReview(review);
+    public ReviewService(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
     }
 
 
 
-    @GetMapping("/{id}")
-    public Optional<Review> getReviewById(@PathVariable Long id) {
-        return reviewService.getReviewById(id);
+    public List<ReviewReadDto> getAllReviews() {
+        return reviewRepository.findAll().stream()
+                       .map(ReviewMapper::fromReviewToReviewReadDto)
+                       .collect(Collectors.toList());
     }
 
-    @GetMapping("/user/{userId}")
-    public List<Review> getReviewsByUser(@PathVariable Long userId) {
-        return reviewService.getReviewsByUser(userId);
+
+    public ReviewReadDto addReview(ReviewCreateDto reviewCreateDto) {
+        Review review = ReviewMapper.fromReviewCreateDtoToReview(reviewCreateDto);
+        Review savedReview = reviewRepository.save(review);
+        return ReviewMapper.fromReviewToReviewReadDto(savedReview);
     }
 
-    @GetMapping("/movie/{movieId}")
-    public List<Review> getReviewsByMovie(@PathVariable Long movieId) {
-        return reviewService.getReviewsByMovie(movieId);
+    /**
+     * Retorna uma review por ID.
+     */
+    public ReviewReadDto getReviewById(Long id) {
+        Review review = reviewRepository.findById(id)
+                                .orElseThrow(()-> new RuntimeException("Review not found"));
+        return ReviewMapper.fromReviewToReviewReadDto(review);
     }
 
-    @GetMapping("/tvshow/{tvShowId}")
-    public List<Review> getReviewsByTvShow(@PathVariable Long tvShowId) {
-        return reviewService.getReviewsByTvShow(tvShowId);
-    }
-
-    @DeleteMapping("/{id}")
-    public void deleteReview(@PathVariable Long id) {
-        reviewService.deleteReview(id);
+    public void deleteReview(Long id) {
+        if (!reviewRepository.existsById(id)) {
+            throw new RuntimeException("Review not found!");
+        }
+        reviewRepository.deleteById(id);
     }
 }

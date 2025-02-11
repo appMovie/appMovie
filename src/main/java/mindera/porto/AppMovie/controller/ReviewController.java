@@ -1,5 +1,8 @@
 package mindera.porto.AppMovie.controller;
 
+import jakarta.validation.Valid;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewCreateDto;
+import mindera.porto.AppMovie.dto.reviewDto.ReviewReadDto;
 import mindera.porto.AppMovie.model.Review;
 import mindera.porto.AppMovie.service.ReviewService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -10,49 +13,28 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping(path = "api/v1/review")
-@Tag(name = "Review", description = "Review management endpoints")
-
+@RequestMapping("/api/v1/reviews")
 public class ReviewController {
 
-    @Autowired
     private final ReviewService reviewService;
 
     public ReviewController(ReviewService reviewService) {
         this.reviewService = reviewService;
     }
 
-
-    @GetMapping
-    public List<Review> getAllReviews() {
+    @GetMapping("")
+    public List<ReviewReadDto> getAllReviews() {
         return reviewService.getAllReviews();
     }
 
-    @PostMapping
-    public Review addReview(@RequestBody Review review) {
-        return reviewService.addReview(review);
+    @PostMapping("")
+    public ReviewReadDto addReview(@Valid @RequestBody ReviewCreateDto reviewDto) {
+        return reviewService.addReview(reviewDto);
     }
-
-
 
     @GetMapping("/{id}")
-    public Optional<Review> getReviewById(@PathVariable Long id) {
+    public ReviewReadDto getReviewById(@PathVariable Long id) {
         return reviewService.getReviewById(id);
-    }
-
-    @GetMapping("/user/{userId}")
-    public List<Review> getReviewsByUser(@PathVariable Long userId) {
-        return reviewService.getReviewsByUser(userId);
-    }
-
-    @GetMapping("/movie/{movieId}")
-    public List<Review> getReviewsByMovie(@PathVariable Long movieId) {
-        return reviewService.getReviewsByMovie(movieId);
-    }
-
-    @GetMapping("/tvshow/{tvShowId}")
-    public List<Review> getReviewsByTvShow(@PathVariable Long tvShowId) {
-        return reviewService.getReviewsByTvShow(tvShowId);
     }
 
     @DeleteMapping("/{id}")

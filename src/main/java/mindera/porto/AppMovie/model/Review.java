@@ -2,9 +2,10 @@ package mindera.porto.AppMovie.model;
 
 import jakarta.persistence.*;
 
-@Entity(name = "reviews")
-@Table
+@Entity
+@Table(name = "reviews")
 public class Review {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,12 +17,18 @@ public class Review {
     private int rating;
 
     @ManyToOne
-    @JoinColumn(name = "movie_id", nullable = false)
+    @JoinColumn(name = "movie_id")
     private Movie movie;
 
     @ManyToOne
     @JoinColumn(name = "tv_show_id")
     private TvShow tvShow;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    // Getters e Setters
 
     public Long getId() {
         return id;
@@ -61,5 +68,13 @@ public class Review {
 
     public void setTvShow(TvShow tvShow) {
         this.tvShow = tvShow;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

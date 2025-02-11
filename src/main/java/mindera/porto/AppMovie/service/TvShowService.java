@@ -45,13 +45,18 @@ public class TvShowService {
 
     //POST /tvshows/add → Criar uma nova série
     public TvShowReadDto addTvShow(TvShowCreateDto tvShowCreateDto) {
-        TvShow tvShow = TvShowMapper.fromTvShowCreateDtoToTvShow(tvShowCreateDto);
-
-        if (tvShowRepository.existsById(tvShow.getId())){
-            throw  new TvShowAlreadyExistsException();
+        // Verifica se já existe um TvShow com o mesmo nome
+        if (tvShowRepository.existsByName(tvShowCreateDto.getName())) {
+            throw new TvShowAlreadyExistsException();
         }
 
+        // Converte o DTO para a entidade TvShow
+        TvShow tvShow = TvShowMapper.fromTvShowCreateDtoToTvShow(tvShowCreateDto);
+
+        // Salva a entidade no banco de dados (ID será gerado automaticamente)
         TvShow savedTvShow = tvShowRepository.save(tvShow);
+
+        // Converte a entidade salva para DTO de leitura e retorna
         return TvShowMapper.fromTvShowToTvShowReadDto(savedTvShow);
     }
 
